@@ -1,5 +1,3 @@
-# BFHL — SRM Full Stack Engineering Challenge
-
 ## Project Structure
 
 ```
@@ -75,12 +73,3 @@ netlify deploy --prod --dir .
 > ```
 
 ---
-
-## 📋 Submission Checklist
-
-- [ ] `user_id`, `email_id`, `college_roll_number` filled in
-- [ ] API hosted (Render / Railway / Vercel / etc.)
-- [ ] Frontend hosted (Netlify / Vercel / etc.)
-- [ ] GitHub repo is public
-- [ ] CORS enabled (already done in server.js)
-- [ ] `POST /bfhl` accepts `application/json`
