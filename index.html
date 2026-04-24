@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BFHL</title>
+<style>
+  body { font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 0 16px; }
+  h2 { margin-bottom: 16px; }
+  label { display: block; margin-bottom: 6px; font-weight: bold; }
+  input[type="text"], textarea { width: 100%; padding: 8px; font-size: 14px; box-sizing: border-box; margin-bottom: 12px; }
+  textarea { height: 100px; resize: vertical; }
+  button { padding: 9px 20px; font-size: 14px; cursor: pointer; }
+  #error { color: red; margin-top: 10px; }
+  pre { background: #f4f4f4; padding: 14px; overflow-x: auto; font-size: 13px; margin-top: 20px; }
+</style>
+</head>
+<body>
+
+<h2>BFHL — Node Hierarchy</h2>
+
+<label>API Base URL</label>
+<input type="text" id="api-url" value="http://localhost:3000" />
+
+<label>Node Edges (comma or newline separated)</label>
+<textarea id="input-data" placeholder="A->B, A->C, B->D, hello, 1->2"></textarea>
+
+<button onclick="submitData()">Submit</button>
+
+<div id="error"></div>
+<pre id="output" style="display:none"></pre>
+
+<script>
+async function submitData() {
+  document.getElementById('error').textContent = '';
+  document.getElementById('output').style.display = 'none';
+
+  const raw = document.getElementById('input-data').value.trim();
+  if (!raw) { document.getElementById('error').textContent = 'Please enter some edges.'; return; }
+
+  const data = raw.split(/[\n,]+/).map(s => s.trim()).filter(Boolean);
+  const base = document.getElementById('api-url').value.trim().replace(/\/$/, '');
+
+  try {
+    const res = await fetch(`${base}/bfhl`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ data })
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = await res.json();
+    const out = document.getElementById('output');
+    out.textContent = JSON.stringify(json, null, 2);
+    out.style.display = 'block';
+  } catch (e) {
+    document.getElementById('error').textContent = 'Error: ' + e.message;
+  }
+}
+</script>
+
+</body>
+</html>
